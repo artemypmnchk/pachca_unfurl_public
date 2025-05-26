@@ -1,0 +1,13 @@
+services:
+  - name: notion
+    match: "notion\\.so"
+    handler: "notion_handler"
+  - name: jira
+    match: "(jira\\.|atlassian\\.net)"
+    handler: "jira_handler"
+  - name: yatracker
+    match: "tracker\\.yandex\\.ru"
+    handler: "yatracker_handler"
+  - name: trello
+    match: "trello\\.com/c/"
+    handler: "trello_handler"
