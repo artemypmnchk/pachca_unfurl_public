@@ -92,14 +92,13 @@ class UnfurlApp < Sinatra::Base
     
     # Вычисляем HMAC-SHA256 от тела запроса
     hmac = OpenSSL::HMAC.hexdigest('SHA256', webhook_secret, request_body)
-    expected_signature = "sha256=#{hmac}"
     
     # Расширенное логирование для отладки
-    $logger.info "Проверка подписи: Ожидаемая подпись: #{expected_signature}"
+    $logger.info "Проверка подписи: Ожидаемая подпись: #{hmac}"
     $logger.info "Проверка подписи: Полученная подпись: #{signature_header}"
     
     # Проверяем подпись
-    if signature_header == expected_signature
+    if signature_header == hmac
       $logger.info "Подпись Пачки верифицирована"
       return true
     else
