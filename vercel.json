@@ -1,9 +1,9 @@
 {
   "version": 2,
   "builds": [
-    { "src": "app.rb", "use": "@vercel/ruby" }
+    { "src": "config.ru", "use": "@vercel/ruby" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/app.rb" }
+    { "src": "/(.*)", "dest": "config.ru" }
   ]
 }
