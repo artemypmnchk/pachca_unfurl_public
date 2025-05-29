@@ -120,7 +120,11 @@ class UnfurlApp < Sinatra::Base
     content_type :json
     
     # Безопасно получаем тело запроса
-    request_body = request.body.read.to_s
+    raw_body = request.body.read
+    request_body = raw_body.dup.force_encoding('UTF-8')
+    unless request_body.valid_encoding?
+      request_body = raw_body.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '?')
+    end
     request.body.rewind
     
     # Логируем запрос
