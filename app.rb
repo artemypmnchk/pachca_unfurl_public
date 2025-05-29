@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'dotenv/load'
 require 'sinatra/base'
 require 'json'
