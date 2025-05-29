@@ -1,2 +1,8 @@
-run = "bundle exec ruby app.rb"
+run = "bundle exec ruby app.rb -o 0.0.0.0 -p 8080"
 language = "ruby"
+entrypoint = "app.rb"
+
+[env]
+LANG = "en_US.UTF-8"
+LC_ALL = "en_US.UTF-8"
+RUBYOPT = "-E UTF-8:UTF-8"
