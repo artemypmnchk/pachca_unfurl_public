@@ -81,6 +81,10 @@ class UnfurlApp < Sinatra::Base
     signature_header = request.env['HTTP_PACHCA_SIGNATURE']
     webhook_secret = ENV['PACHCA_WEBHOOK_SECRET']
     
+    # Расширенное логирование для отладки
+    $logger.info "Проверка подписи: Получен заголовок подписи: #{signature_header || 'отсутствует'}"
+    $logger.info "Проверка подписи: Секрет вебхука #{webhook_secret ? 'присутствует' : 'отсутствует'}"
+    
     unless signature_header && webhook_secret
       $logger.warn "Отсутствует подпись или секрет вебхука"
       return false
@@ -89,6 +93,10 @@ class UnfurlApp < Sinatra::Base
     # Вычисляем HMAC-SHA256 от тела запроса
     hmac = OpenSSL::HMAC.hexdigest('SHA256', webhook_secret, request_body)
     expected_signature = "sha256=#{hmac}"
+    
+    # Расширенное логирование для отладки
+    $logger.info "Проверка подписи: Ожидаемая подпись: #{expected_signature}"
+    $logger.info "Проверка подписи: Полученная подпись: #{signature_header}"
     
     # Проверяем подпись
     if signature_header == expected_signature
