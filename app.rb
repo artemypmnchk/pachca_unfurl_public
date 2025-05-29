@@ -75,36 +75,29 @@ class UnfurlApp < Sinatra::Base
   
   # Проверка подписи Пачки
   def verify_pachca_signature(request_body)
-    # ВРЕМЕННО: Всегда возвращаем true для тестирования
-    # ВНИМАНИЕ: Это небезопасно для продакшена!
-    # Используйте только для тестирования и затем верните исходный код
-    $logger.warn "ВНИМАНИЕ: Проверка подписи временно отключена для тестирования"
-    return true
-    
-    # Оригинальный код проверки подписи (временно отключен)
     # В режиме разработки можно отключить проверку
-    # return true if ENV['RACK_ENV'] == 'development' && ENV['SKIP_SIGNATURE_CHECK'] == 'true'
-    # 
-    # signature_header = request.env['HTTP_PACHCA_SIGNATURE']
-    # webhook_secret = ENV['PACHCA_WEBHOOK_SECRET']
-    # 
-    # unless signature_header && webhook_secret
-    #   $logger.warn "Отсутствует подпись или секрет вебхука"
-    #   return false
-    # end
-    # 
-    # # Вычисляем HMAC-SHA256 от тела запроса
-    # hmac = OpenSSL::HMAC.hexdigest('SHA256', webhook_secret, request_body)
-    # expected_signature = "sha256=#{hmac}"
-    # 
-    # # Проверяем подпись
-    # if signature_header == expected_signature
-    #   $logger.info "Подпись Пачки верифицирована"
-    #   return true
-    # else
-    #   $logger.warn "Неверная подпись Пачки"
-    #   return false
-    # end
+    return true if ENV['RACK_ENV'] == 'development' && ENV['SKIP_SIGNATURE_CHECK'] == 'true'
+    
+    signature_header = request.env['HTTP_PACHCA_SIGNATURE']
+    webhook_secret = ENV['PACHCA_WEBHOOK_SECRET']
+    
+    unless signature_header && webhook_secret
+      $logger.warn "Отсутствует подпись или секрет вебхука"
+      return false
+    end
+    
+    # Вычисляем HMAC-SHA256 от тела запроса
+    hmac = OpenSSL::HMAC.hexdigest('SHA256', webhook_secret, request_body)
+    expected_signature = "sha256=#{hmac}"
+    
+    # Проверяем подпись
+    if signature_header == expected_signature
+      $logger.info "Подпись Пачки верифицирована"
+      return true
+    else
+      $logger.warn "Неверная подпись Пачки"
+      return false
+    end
   end
 
   # Загрузка конфигурации сервисов
