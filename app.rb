@@ -54,8 +54,8 @@ class UnfurlApp < Sinatra::Base
   # Настройка логгера
   configure do
     enable :logging
-    log_file = File.join(__dir__, 'unfurl.log')
-    $logger = Logger.new(log_file)
+    # Используем STDOUT вместо файла для совместимости с Vercel/Lambda
+    $logger = Logger.new(STDOUT)
     $logger.level = ENV['RACK_ENV'] == 'development' ? Logger::DEBUG : Logger::INFO
     $logger.formatter = proc do |severity, datetime, progname, msg|
       "[#{datetime}] #{severity}: #{msg}\n"
