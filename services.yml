@@ -1,0 +1,7 @@
+services:
+  - name: trello
+    match: "trello\\.com/c/"
+    handler: "trello_handler"
+  - name: kaiten
+    match: "kaiten\\.ru/.*?/card/"
+    handler: "kaiten_handler"
